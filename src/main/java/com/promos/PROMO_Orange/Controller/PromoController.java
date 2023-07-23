@@ -19,5 +19,5 @@ public class PromoController {
     public Requests getPromoRequest(@RequestParam int msisdn, @RequestParam int offerid ) {
         return promoBL.getPromoRequest(msisdn,offerid);
     }
-   // GET https://localhost:8080/Promo
+   // http://localhost:8080/Promo?msisdn=0123456&offerid=23
 }
