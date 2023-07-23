@@ -1,9 +1,11 @@
 package com.promos.PROMO_Orange.Model;
 
+import org.springframework.stereotype.Component;
+@Component
+
 public class Requests {
     private int Msisdn;
     private int offerId;
-
 
 
     public void setofferId(int offerid) {

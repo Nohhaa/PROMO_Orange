@@ -2,10 +2,7 @@ package com.promos.PROMO_Orange.Controller;
 
 import com.promos.PROMO_Orange.BL.PromoBL;
 import com.promos.PROMO_Orange.Model.Requests;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/Promo")
@@ -19,7 +16,8 @@ public class PromoController {
     }
 
     @GetMapping
-    public Requests getPromoRequest(@PathVariable int msisdn, int offerid ) {
+    public Requests getPromoRequest(@RequestParam int msisdn, @RequestParam int offerid ) {
         return promoBL.getPromoRequest(msisdn,offerid);
     }
+   // GET https://localhost:8080/Promo
 }

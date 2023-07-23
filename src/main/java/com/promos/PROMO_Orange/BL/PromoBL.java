@@ -14,6 +14,7 @@ public class PromoBL {
     public Requests getPromoRequest(int msisdn, int offerId) {
         Req.setofferId(offerId);
         Req.setMsisdn(msisdn);
+        System.out.println(Req.getMsisdn()+" "+Req.getofferId());
         return Req;
 
     }
