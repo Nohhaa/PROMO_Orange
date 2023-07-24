@@ -1,5 +1,6 @@
 package com.promos.PROMO_Orange.Model;
-
+import org.springframework.stereotype.Component;
+@Component
 public class Offer {
     private int Id;
 
@@ -11,12 +12,6 @@ public class Offer {
 
 
 
-    public Offer(int id, int value, int validity, String type) {
-        Id = id;
-        Value = value;
-        Validity = validity;
-        Type = type;
-    }
 
     public int getValue() {
         return Value;

@@ -1,4 +1,7 @@
 package com.promos.PROMO_Orange.Model;
+import org.springframework.stereotype.Component;
+
+@Component
 
 public class Fulfillment {
     private int Msisdn;
@@ -10,15 +13,6 @@ public class Fulfillment {
 
     private String Date;
 
-
-
-    public Fulfillment(int id, int msisdn, int offerId, String status, String date) {
-        Id = id;
-        Msisdn=msisdn;
-        OfferId = offerId;
-        Status = status;
-        Date = date;
-    }
 
     public int getOfferId() {
         return OfferId;

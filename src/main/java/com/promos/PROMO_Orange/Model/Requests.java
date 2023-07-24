@@ -1,7 +1,12 @@
 package com.promos.PROMO_Orange.Model;
-
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.Entity;
+
 @Component
+@Entity
+
 
 public class Requests {
     private int Msisdn;

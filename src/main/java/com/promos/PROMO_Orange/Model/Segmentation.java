@@ -1,5 +1,6 @@
 package com.promos.PROMO_Orange.Model;
-
+import org.springframework.stereotype.Component;
+@Component
 public class Segmentation {
 
     private int Msisdn;
@@ -7,13 +8,6 @@ public class Segmentation {
 
     private int OfferId;
 
-
-    public Segmentation(int segment, int msisdn, int offerId) {
-        Segment = segment;
-        Msisdn=msisdn;
-        OfferId = offerId;
-
-    }
 
     public int getOfferId() {
         return OfferId;

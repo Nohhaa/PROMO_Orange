@@ -1,16 +1,14 @@
 package com.promos.PROMO_Orange.Model;
 
+import org.springframework.stereotype.Component;
+
+import javax.persistence.*;
+@Entity
+@Component
 public class Customer {
     private int Msisdn;
     private int Id;
 
-
-
-    public Customer(int id,int msisdn) {
-        Id = id;
-        Msisdn=msisdn;
-
-    }
     public void setId(int id) {
         Id = id;
     }
