@@ -2,85 +2,139 @@ package com.promos.PROMO_Orange.BL;
 
 import com.promos.PROMO_Orange.Model.*;
 import com.promos.PROMO_Orange.Model.Customer;
+import com.promos.PROMO_Orange.Repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 @Service
 public class PromoBL {
-    private final Requests Req;
-    private final Customer Cus;
+    private Requests Req;
+    private Customer_Repo cus_Repo;
+    private  Segmentation_Repo seg_Repo;
+    private  Fullfillment_Repo full_Repo;
+    private  Offer_Repo offer_Repo;
 
-    private final Fulfillment Ful;
-    private final Offer Off;
-    private final Segmentation Seg;
-    public int idBl;
-    public int offer_Avail;
-    public int fulId;
 
-    ArrayList<Integer> segments = new ArrayList<>();
-    public PromoBL(Requests req, Customer cus, Fulfillment ful, Offer off, Segmentation seg) {
+    private Customer Cus;
+
+    public Long idBl;
+
+    ArrayList<Segmentation> segments = new ArrayList<>();
+    ArrayList<Fulfillment> Fullfilled = new ArrayList<>();
+    ArrayList<Integer> SegId = new ArrayList<>();
+
+    public PromoBL(Requests req) {
         Req = req;
-        Cus = cus;
-        Ful = ful;
-        Off = off;
-        Seg = seg;
     }
 
-    public Requests getPromoRequest(int msisdn, int offerId) {
+
+    public Requests getPromoRequest(Long msisdn, Long offerId) {
         Req.setofferId(offerId);
         Req.setMsisdn(msisdn);
-        System.out.println(Req.getMsisdn()+" "+Req.getofferId());
+        System.out.println(Req.getMsisdn() + " " + Req.getofferId());
         return Req;
 
     }
-    public Customer IsCustomer(int msisdn) {
 
-       // idBl=(Select id from Customer where Msisdn=msisdn);
 
-        if(idBl!=1) {
-            Cus.setMsisdn(msisdn);
-            Cus.setId(idBl);
-            //System.out.println(Req.getMsisdn() + " " + Req.getofferId());
-            return Cus;
+    public Boolean IsCustomer(Long msisdn) {
+        Customer_Service Search = new Customer_Service();
+        Cus = Search.fetchCustomerById(msisdn);
+        if (Cus != null) {
+            idBl = Cus.getMsisdn();
+            return true;
         }
-        else {
-            return null;
-        }
+        System.out.println("NOT Customer");
+
+        return false;
     }
-    public ArrayList<Integer> IsSegmented(Customer cus) {
-        // segments=(Select Segment from Segmentation where Msisdn= cus.getmsisdn());
 
-        if(segments.size()>0) {
 
-            return segments;
-        }
-        else {
-            return null;
-        }
+    public boolean IsSegmented(Long msisdn) {
+        Segmentation_Service Search = new Segmentation_Service(seg_Repo);
+        segments = Search.findSegmentationByMsisdn(msisdn);
 
-    }
-    public Boolean IsAvailable(int offerId, ArrayList<Integer> segments) {
+        if (segments.size() > 0) {
 
-        for(int i=0;i<segments.size();i++)
-        {
-            //offer_Avail = (select offerid from Segmentation where segment=segments[i]
-
-            if (offer_Avail != 1) {
-
-                return true;
+            for (int i = 0; i < segments.size(); i++) {
+                SegId.add(segments.get(i).getId().getSegment());
             }
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public Boolean IsAvailable(Long offerId) {
+        Segmentation_Service Search = new Segmentation_Service(seg_Repo);
+        segments.clear();
+        segments = Search.findSegmentationByOfferId(offerId);
+
+        for (int i = 0; i < SegId.size(); i++) {
+            int Sid = SegId.get(i);
+            for (int j = 0; j < segments.size(); j++) {
+                if (Sid == segments.get(i).getId().getSegment()) {
+                    return true;
+                }
+
+
+            }
+
         }
         return false;
     }
-    public Boolean IsFulfilled(int msisdn, int offerId) {
-        //fulId = (select id from Fulfillment where Msisdn=msisdn and offerId=offerId)
 
-            if (fulId != 1)
-            {
-                return true;
+
+    public Boolean IsFullfilled(Long msisdn, Long offerId) {
+        Fullfillment_Service Search = new Fullfillment_Service(full_Repo);
+        Fullfilled = Search.findFullfillmentByMsisdn(msisdn);
+
+
+        for (int i = 0; i < Fullfilled.size(); i++) {
+            if (Fullfilled.get(i).getOfferId() == offerId) {
+                return false;
             }
-       else
-        return false;
+
+        }
+
+        LocalTime currentTime = LocalTime.now();
+        Long id = null;
+        Fulfillment fill = new Fulfillment(id, msisdn, offerId, "redeemed", "" + currentTime);
+
+        return true;
     }
+
+
+    public String Flow(Long msisdn, Long offerId) {
+        ArrayList<Integer> Temp_Seg = new ArrayList<>();
+        getPromoRequest(msisdn, offerId);
+        if (IsCustomer(msisdn)) {
+            if (IsSegmented(msisdn)) {
+
+                if (IsAvailable(offerId)) {
+                    if (!IsFullfilled(msisdn, offerId)) {
+                        return "Gift already redeemed.";
+                    } else {
+                        return "Gift is successfully redeemed";
+                    }
+                } else {
+                    return "offer Not available .";
+                }
+
+            } else {
+                return "offer Not available .";
+            }
+
+
+        } else {
+            return "offer Not available .";
+        }
+
+    }
+
 }

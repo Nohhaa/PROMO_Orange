@@ -1,27 +1,53 @@
 package com.promos.PROMO_Orange.Model;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.repository.support.Repositories;
 
-import org.springframework.stereotype.Component;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+
 @Entity
-@Component
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
+
+
 public class Customer {
-    private int Msisdn;
-    private int Id;
 
-    public void setId(int id) {
-        Id = id;
-    }
-    public int getId() {
-        return Id;
+    @Column(name = "Msisdn")
+    private Long msisdn;
+
+    @Column(name = "Id")
+    private Long id;
+
+
+    public void setId(long Id) {
+        id = Id;
+
     }
 
-    public int getMsisdn() {
-        return Msisdn;
+
+    public long getId() {
+        return id;
     }
 
-    public void setMsisdn(int msisdn) {
-        Msisdn = msisdn;
+    @Id
+    public Long getMsisdn() {
+        return msisdn;
     }
+
+    public void setMsisdn(Long msisdn) {
+        this. msisdn = msisdn;
+    }
+
+
+
+
 
 }

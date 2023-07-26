@@ -1,35 +1,46 @@
 package com.promos.PROMO_Orange.Model;
-import org.springframework.stereotype.Component;
-@Component
+
+import jakarta.persistence.*;
+
+@Entity
 public class Segmentation {
 
-    private int Msisdn;
-    private int Segment;
+    @EmbeddedId
+    private SegmentationId id;
 
-    private int OfferId;
+    @ManyToOne
+    @JoinColumn(name = "Msisdn", referencedColumnName = "Msisdn", insertable = false, updatable = false)
+    private Customer customer;
+
+    @Column(name = "OfferId")
+    private Long offerId;
+
+    @ManyToOne
+    @JoinColumn(name = "OfferId", referencedColumnName = "Id", insertable = false, updatable = false)
+    private Offer offer;
 
 
-    public int getOfferId() {
-        return OfferId;
+    public Segmentation() {
     }
 
-    public void setOfferId(int offerId) {
-        OfferId = offerId;
+    public Segmentation(Long msisdn, int segment, Long offerId) {
+        this.id = new SegmentationId(msisdn, segment);
+        this.offerId = offerId;
     }
 
-    public int getSegment() {
-        return Segment;
+    public Long getOfferId() {
+        return offerId;
     }
 
-    public void setSegment(int segment) {
-        Segment = segment;
-    }
-    public int getMsisdn() {
-        return Msisdn;
+    public void setOfferId(Long offerId) {
+        this.offerId = offerId;
     }
 
-    public void setMsisdn(int msisdn) {
-        Msisdn = msisdn;
+    public SegmentationId getId() {
+        return id;
     }
 
+    public void setId(SegmentationId id) {
+        this.id = id;
+    }
 }

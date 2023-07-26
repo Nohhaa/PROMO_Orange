@@ -1,46 +1,65 @@
 package com.promos.PROMO_Orange.Model;
-import org.springframework.stereotype.Component;
-@Component
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Offer {
-    private int Id;
 
-    private int Value;
+    @Column(name = "Id")
+    private Long id;
 
-    private int Validity;
+    @Column(name = "Offer_Value")
+    private int offer_Value;
 
-    private String Type;
+    @Column(name = "Validity")
+    private int validity;
 
+    @Column(name = "Type")
+    private String type;
 
+    public Offer(){
 
-
-    public int getValue() {
-        return Value;
+    }
+    public Offer(int offer_value, int validity, String type) {
+        offer_Value = offer_value;
+        this.validity = validity;
+        this.type = type;
     }
 
-    public void setValue(int value) {
-        Value = value;
+
+    public void setId(Long id) {
+
+        this.id = id;
     }
+
+    @Id
+    public Long getId() {
+        return id;
+    }
+
+    public int getOffer_Value() {
+        return offer_Value;
+    }
+
+    public void setOffer_Value(int offer_Value) {
+        this.offer_Value = offer_Value;
+    }
+
     public int getValidity() {
-        return Validity;
+        return validity;
     }
 
     public void setValidity(int validity) {
-        Validity = validity;
+        this.validity = validity;
     }
 
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
     public String getType() {
-        return Type;
+        return type;
     }
 
     public void setType(String type) {
-        Type = type;
+        this.type = type;
     }
-
 }

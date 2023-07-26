@@ -2,29 +2,29 @@ package com.promos.PROMO_Orange.Model;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
+
 
 @Component
-@Entity
+
 
 
 public class Requests {
-    private int Msisdn;
-    private int offerId;
+    private Long Msisdn;
+    private Long offerId;
 
 
-    public void setofferId(int offerid) {
+    public void setofferId(Long offerid) {
         offerId = offerid;
     }
-    public int getofferId() {
+    public Long getofferId() {
         return offerId;
     }
 
-    public int getMsisdn() {
+    public Long getMsisdn() {
         return Msisdn;
     }
 
-    public void setMsisdn(int msisdn) {
+    public void setMsisdn(Long msisdn) {
         Msisdn = msisdn;
     }
 }
