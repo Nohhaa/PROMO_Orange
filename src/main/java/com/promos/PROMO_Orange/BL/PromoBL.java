@@ -21,13 +21,23 @@ public class PromoBL {
     private Customer Cus;
 
     public Long idBl;
+    private final Segmentation_Service Seg_Search ;
+    private final Fullfillment_Service Ful_Search;
 
-    ArrayList<Segmentation> segments = new ArrayList<>();
-    ArrayList<Fulfillment> Fullfilled = new ArrayList<>();
-    ArrayList<Integer> SegId = new ArrayList<>();
+    private final Customer_Service Cus_Search ;
+    ArrayList<Integer> SegId1 = new ArrayList<>();
 
-    public PromoBL(Requests req) {
+
+
+
+
+    @Autowired
+    public PromoBL(Requests req, Segmentation_Service seg_search, Fullfillment_Service ful_search, Customer_Service cus_search) {
         Req = req;
+
+        Seg_Search = seg_search;
+        Ful_Search = ful_search;
+        Cus_Search = cus_search;
     }
 
 
@@ -41,8 +51,8 @@ public class PromoBL {
 
 
     public Boolean IsCustomer(Long msisdn) {
-        Customer_Service Search = new Customer_Service();
-        Cus = Search.fetchCustomerById(msisdn);
+
+        Cus = Cus_Search.fetchCustomerById(msisdn);
         if (Cus != null) {
             idBl = Cus.getMsisdn();
             return true;
@@ -54,13 +64,14 @@ public class PromoBL {
 
 
     public boolean IsSegmented(Long msisdn) {
-        Segmentation_Service Search = new Segmentation_Service(seg_Repo);
-        segments = Search.findSegmentationByMsisdn(msisdn);
+        ArrayList<Segmentation> segments=new ArrayList<>();
+
+        segments = Seg_Search.findSegmentationByMsisdn(msisdn);
 
         if (segments.size() > 0) {
 
             for (int i = 0; i < segments.size(); i++) {
-                SegId.add(segments.get(i).getId().getSegment());
+                SegId1.add(segments.get(i).getId().getSegment());
             }
 
             return true;
@@ -71,14 +82,16 @@ public class PromoBL {
 
 
     public Boolean IsAvailable(Long offerId) {
-        Segmentation_Service Search = new Segmentation_Service(seg_Repo);
-        segments.clear();
-        segments = Search.findSegmentationByOfferId(offerId);
 
-        for (int i = 0; i < SegId.size(); i++) {
-            int Sid = SegId.get(i);
-            for (int j = 0; j < segments.size(); j++) {
-                if (Sid == segments.get(i).getId().getSegment()) {
+        ArrayList<Segmentation> segments2=new ArrayList<>();
+
+        segments2 = Seg_Search.findSegmentationByOfferId(offerId);
+
+        for (int i = 0; i < SegId1.size(); i++) {
+            int Sid = SegId1.get(i);
+            for (int j = 0; j < segments2.size(); j++) {
+                if (Sid == segments2.get(i).getId().getSegment()) {
+                    SegId1.clear();
                     return true;
                 }
 
@@ -86,13 +99,14 @@ public class PromoBL {
             }
 
         }
+        SegId1.clear();
         return false;
     }
 
 
     public Boolean IsFullfilled(Long msisdn, Long offerId) {
-        Fullfillment_Service Search = new Fullfillment_Service(full_Repo);
-        Fullfilled = Search.findFullfillmentByMsisdn(msisdn);
+        ArrayList<Fulfillment> Fullfilled = new ArrayList<>();
+        Fullfilled = Ful_Search.findFullfillmentByMsisdn(msisdn);
 
 
         for (int i = 0; i < Fullfilled.size(); i++) {
@@ -103,15 +117,16 @@ public class PromoBL {
         }
 
         LocalTime currentTime = LocalTime.now();
-        Long id = null;
-        Fulfillment fill = new Fulfillment(id, msisdn, offerId, "redeemed", "" + currentTime);
+        int id=0;
+        Fulfillment fill = new Fulfillment((long)id, msisdn, offerId, "redeemed", "" + currentTime);
+        Ful_Search.SaveFullfillment(fill);
 
         return true;
     }
 
 
     public String Flow(Long msisdn, Long offerId) {
-        ArrayList<Integer> Temp_Seg = new ArrayList<>();
+
         getPromoRequest(msisdn, offerId);
         if (IsCustomer(msisdn)) {
             if (IsSegmented(msisdn)) {

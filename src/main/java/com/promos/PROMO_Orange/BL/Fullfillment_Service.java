@@ -2,6 +2,7 @@ package com.promos.PROMO_Orange.BL;
 
 import com.promos.PROMO_Orange.Model.Fulfillment;
 import com.promos.PROMO_Orange.Repositories.Fullfillment_Repo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,8 +10,8 @@ import java.util.Optional;
 
 @Service
 public class Fullfillment_Service {
-    private final Fullfillment_Repo fullfillment;
-
+    private  Fullfillment_Repo fullfillment=null;
+    @Autowired
     public Fullfillment_Service(Fullfillment_Repo fullfillment) {
         this.fullfillment = fullfillment;
     }

@@ -9,8 +9,9 @@ import java.util.Optional;
 
 @Service
 public class Offer_Service {
-    private final Offer_Repo offer;
 
+    private  Offer_Repo offer=null;
+    @Autowired
     public Offer_Service(Offer_Repo myRepository) {
         this.offer = myRepository;
     }

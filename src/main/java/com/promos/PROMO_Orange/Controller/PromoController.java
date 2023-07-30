@@ -16,8 +16,8 @@ public class PromoController {
     }
 
     @GetMapping
-    public void getPromoRequest(@RequestParam Long msisdn, @RequestParam Long offerid ) {
-        promoBL.Flow(msisdn,offerid);
+    public String getPromoRequest(@RequestParam Long msisdn, @RequestParam Long offerid ) {
+        return promoBL.Flow(msisdn,offerid);
     }
    // http://localhost:8080/Promo?msisdn=0123456&offerid=23
 }

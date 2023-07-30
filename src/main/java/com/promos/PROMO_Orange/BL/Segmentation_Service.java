@@ -13,8 +13,8 @@ import java.util.Optional;
 
 @Service
 public class Segmentation_Service {
-    private final Segmentation_Repo segmentation;
-
+    private  Segmentation_Repo segmentation=null;
+    @Autowired
     public Segmentation_Service(Segmentation_Repo myRepository) {
         this.segmentation = myRepository;
     }
